@@ -67,6 +67,9 @@ function importBibtex() {
     const isBook = entryType === 'book';
     const OUTPUT_DIR = isBook ? BOOKS_DIR : PUBLICATIONS_DIR;
     
+    // 学会発表(inproceedings など)か、論文(article など)か
+    const kind = ['inproceedings', 'conference', 'proceedings', 'incollection'].includes(entryType) ? 'conference' : 'journal';
+
     let type = isBook ? 'book' : 'paper';
     if (!isBook) {
       if (entryType === 'patent') {
@@ -135,6 +138,9 @@ function importBibtex() {
     if (note.toLowerCase().includes('best paper') && !award.toLowerCase().includes('best paper')) {
        badges.push({ text: 'Best Paper', type: 'gold' });
     }
+    if (note.toLowerCase().includes('invited')) {
+       badges.push({ text: 'Invited', type: 'blue' });
+    }
     if (note.toLowerCase().includes('oral')) {
        badges.push({ text: 'Oral', type: 'blue' });
     }
@@ -176,6 +182,7 @@ function importBibtex() {
       `venue: "${venue.replace(/"/g, '\\"')}"`,
       // Only add type for publications, not books
       isBook ? '' : `type: "${type}"`,
+      isBook ? '' : `kind: "${kind}"`,
       cover ? `cover: "${cover}"` : '',
       'links:',
       `  pdf: "${pdf}"`,

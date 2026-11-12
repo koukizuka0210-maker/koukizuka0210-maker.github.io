@@ -12,9 +12,11 @@ import PublicationItem from '../components/PublicationItem.astro';
 const jp = ui.ja;
 
 // citations.bib から生成された業績(新しい順)
-const papers = (await getCollection('publications'))
+const allPubs = (await getCollection('publications'))
   .filter(p => p.data.type === 'paper')
   .sort((a, b) => b.data.year - a.data.year);
+const papers = allPubs.filter(p => p.data.kind === 'journal');
+const conferences = allPubs.filter(p => p.data.kind === 'conference');
 
 const headingClass = 'text-2xl font-bold text-gray-900 mb-6 pl-4 border-l-4 border-blue-600';
 ---
@@ -66,7 +68,7 @@ const headingClass = 'text-2xl font-bold text-gray-900 mb-6 pl-4 border-l-4 bord
       <h2 class={headingClass} data-i18n-key="profile.about">{jp['profile.about']}</h2>
       <div class="space-y-4 text-gray-700 leading-relaxed">
         {profile.bio.map(paragraph => (
-          <p {...bi(paragraph)}>{paragraph.ja}</p>
+          <p class="whitespace-pre-line" {...bi(paragraph)}>{paragraph.ja}</p>
         ))}
       </div>
     </section>
@@ -80,6 +82,23 @@ const headingClass = 'text-2xl font-bold text-gray-900 mb-6 pl-4 border-l-4 bord
             <li class="px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-medium" {...bi(item)}>{item.ja}</li>
           ))}
         </ul>
+      </section>
+    )}
+
+    <!-- 職歴 -->
+    {profile.career.length > 0 && (
+      <section id="career" class="mb-16 scroll-mt-24">
+        <h2 class={headingClass} data-i18n-key="profile.career">{jp['profile.career']}</h2>
+        <ol class="space-y-8 border-l border-gray-200 ml-2">
+          {profile.career.map(item => (
+            <li class="relative pl-6">
+              <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <div class="text-sm text-gray-500" {...bi(item.period)}>{item.period.ja}</div>
+              <div class="font-semibold text-gray-900" {...bi(item.title)}>{item.title.ja}</div>
+              <div class="text-gray-600" {...bi(item.org)}>{item.org.ja}</div>
+            </li>
+          ))}
+        </ol>
       </section>
     )}
 
@@ -100,30 +119,57 @@ const headingClass = 'text-2xl font-bold text-gray-900 mb-6 pl-4 border-l-4 bord
       </section>
     )}
 
+    <!-- 業績(citations.bib): 論文と学会発表に分けて表示 -->
+    <section id="publications" class="mb-16 scroll-mt-24">
+      <h2 class={headingClass} data-i18n-key="profile.publications">{jp['profile.publications']}</h2>
+
+      <h3 id="papers" class="text-lg font-semibold text-gray-900 mt-2 mb-2 scroll-mt-24" data-i18n-key="profile.papers">{jp['profile.papers']}</h3>
+      <div class="grid gap-2 mb-8">
+        {papers.map(paper => <PublicationItem entry={paper} />)}
+        {papers.length === 0 && <p class="text-gray-500 italic" data-i18n-key="profile.noPapers">{jp['profile.noPapers']}</p>}
+      </div>
+
+      <h3 id="conferences" class="text-lg font-semibold text-gray-900 mt-2 mb-2 scroll-mt-24" data-i18n-key="profile.conferences">{jp['profile.conferences']}</h3>
+      <div class="grid gap-2">
+        {conferences.map(paper => <PublicationItem entry={paper} />)}
+        {conferences.length === 0 && <p class="text-gray-500 italic" data-i18n-key="profile.noPapers">{jp['profile.noPapers']}</p>}
+      </div>
+    </section>
+
     <!-- 受賞歴 -->
     {profile.awards.length > 0 && (
       <section id="awards" class="mb-16 scroll-mt-24">
         <h2 class={headingClass} data-i18n-key="profile.awards">{jp['profile.awards']}</h2>
-        <div class="grid gap-6 sm:grid-cols-2">
+        <ol class="space-y-6 border-l border-gray-200 ml-2">
           {profile.awards.map(award => (
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <div class="text-sm text-gray-500 mb-2" {...bi(award.date)}>{award.date.ja}</div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-1" {...bi(award.title)}>{award.title.ja}</h3>
-              <p class="text-sm text-gray-600" {...bi(award.org)}>{award.org.ja}</p>
-            </div>
+            <li class="relative pl-6">
+              <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <div class="text-sm text-gray-500" {...bi(award.date)}>{award.date.ja}</div>
+              <div class="font-semibold text-gray-900" {...bi(award.title)}>{award.title.ja}</div>
+              {award.org && <div class="text-gray-600" {...bi(award.org)}>{award.org.ja}</div>}
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
     )}
 
-    <!-- 業績(citations.bib) -->
-    <section id="publications" class="mb-16 scroll-mt-24">
-      <h2 class={headingClass} data-i18n-key="profile.publications">{jp['profile.publications']}</h2>
-      <div class="grid gap-2">
-        {papers.map(paper => <PublicationItem entry={paper} />)}
-        {papers.length === 0 && <p class="text-gray-500 italic" data-i18n-key="profile.noPapers">{jp['profile.noPapers']}</p>}
-      </div>
-    </section>
+    <!-- 競争的資金獲得実績 -->
+    {profile.funding.length > 0 && (
+      <section id="funding" class="mb-16 scroll-mt-24">
+        <h2 class={headingClass} data-i18n-key="profile.funding">{jp['profile.funding']}</h2>
+        <ol class="space-y-8 border-l border-gray-200 ml-2">
+          {profile.funding.map(item => (
+            <li class="relative pl-6">
+              <span class="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <div class="text-sm text-gray-500" {...bi(item.period)}>{item.period.ja}</div>
+              <div class="font-semibold text-gray-900" {...bi(item.title)}>{item.title.ja}</div>
+              <div class="text-gray-600" {...bi(item.org)}>{item.org.ja}</div>
+              {item.detail && <div class="text-sm text-gray-500 mt-1" {...bi(item.detail)}>{item.detail.ja}</div>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
 
     {profile.notice && (
       <p class="mt-8 pt-6 border-t border-gray-100 text-sm text-gray-500" {...bi(profile.notice)}>{profile.notice.ja}</p>

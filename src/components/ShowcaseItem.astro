@@ -17,8 +17,8 @@ const reverse = index % 2 === 1;
 
 <article class={`flex flex-col gap-6 md:gap-10 items-center ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
   {image && (
-    <div class="w-full md:w-1/2 shrink-0 overflow-hidden rounded-xl border border-gray-100 shadow-sm bg-gray-50 aspect-[3/2]">
-      <img src={image} alt={title.en} loading="lazy" class="w-full h-full object-cover" />
+    <div class="w-full md:w-1/2 shrink-0 overflow-hidden rounded-xl border border-gray-100 shadow-sm bg-white aspect-[3/2]">
+      <img src={image} alt={title.en} loading="lazy" class="w-full h-full object-contain" />
     </div>
   )}
   <div class:list={['w-full', image && 'md:w-1/2']}>

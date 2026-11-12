@@ -10,6 +10,8 @@ const publications = defineCollection({
     year: z.number(),
     venue: z.string(),
     type: z.enum(['paper', 'book', 'patent', 'software']).default('paper'),
+    // journal: 論文 / conference: 学会発表(citations.bib の article / inproceedings などで決まります)
+    kind: z.enum(['journal', 'conference']).default('journal'),
     cover: image().optional(),
     doi: z.string().optional(),
     award: z.string().optional(),
