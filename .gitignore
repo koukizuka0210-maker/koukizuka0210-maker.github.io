@@ -1,0 +1,46 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+.env.local
+
+# macOS-specific files
+.DS_Store
+
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+*.swp
+*.swo
+
+# Testing
+coverage/
+
+# Vercel
+.vercel/
+
+# citations.bib から `npm run import-bibtex` が自動生成する業績ファイル
+# (公開時の `npm run build` でも自動生成されるため、Git には含めません)
+src/content/publications/*.md
+src/content/books/*.md
