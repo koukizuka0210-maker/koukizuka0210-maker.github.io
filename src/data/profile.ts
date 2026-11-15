@@ -45,16 +45,16 @@ export const profile: Profile = {
   role: { ja: '博士研究員', en: 'Postdoctoral Researcher' },
   university: { ja: '九州工業大学', en: 'Kyushu Institute of Technology' },
   department: {
-    ja: '未来思考実証センター / ニューロモルフィックAIハードウェア研究センター',
+    ja: 'ニューロモルフィックAIハードウェア研究センター / 未来思考実証センター',
     // TODO: 「未来思考実証センター」の英語の正式名称を本人に確認する(以下の前半は仮の訳です)
-    en: 'Center for Future-Oriented Demonstration / Research Center for Neuromorphic AI Hardware',
+    en: 'Research Center for Neuromorphic AI Hardware / Future Thinking and Exploration Centern',
   },
 
   // トップの大きな見出し(短く、1〜2文)。共有時の説明文にも使われます。
   // TODO: 本人に確認する(LinkedIn の経歴と、受賞した発表題目から作った仮の文です)
   headline: {
-    ja: 'ニューロモルフィックAIハードウェアの研究をしています。',
-    en: 'Researching neuromorphic AI hardware.',
+    ja: '柔軟なスポンジAIセンサの開発を行っています。',
+    en: 'Developing soft AI sensors for Physical AI.',
   },
 
   // --- 自己紹介(段落ごとに { ja, en } を1つ追加) ----------------
